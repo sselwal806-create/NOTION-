@@ -1,48 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; background: transparent; }
-        .slider-container { position: relative; width: 100%; max-width: 800px; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: white; }
-        .slides { display: flex; transition: transform 0.4s ease-in-out; }
-        .slide { min-width: 100%; box-sizing: border-box; padding: 20px; text-align: center; }
-        .slide img { width: 100%; height: auto; border-radius: 8px; object-fit: cover; max-height: 400px; }
-        .slide-content { padding: 15px 10px; }
-        .slide-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; color: #37352f; }
-        .slide-desc { font-size: 0.95rem; color: #666; line-height: 1.5; }
-        
-        /* 左右按鈕 */
-        .btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.8); border: none; cursor: pointer; padding: 10px 15px; border-radius: 50%; font-size: 18px; transition: 0.3s; z-index: 10; }
-        .btn:hover { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .prev { left: 10px; }
-        .next { right: 10px; }
+        body { margin: 0; display: flex; justify-content: center; background: white; font-family: sans-serif; }
+        .slider { position: relative; width: 100vw; overflow: hidden; }
+        .slides { display: flex; transition: 0.5s; }
+        .slide { min-width: 100vw; text-align: center; padding: 20px; box-sizing: border-box; }
+        img { max-width: 90%; height: auto; border-radius: 10px; }
+        .btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.1); border: none; padding: 15px; cursor: pointer; font-size: 20px; z-index: 100; }
+        .prev { left: 0; }
+        .next { right: 0; }
     </style>
 </head>
 <body>
 
-<div class="slider-container">
-    <div class="slides" id="slides">
+<div class="slider">
+    <button class="btn prev" onclick="plusSlides(-1)">❮</button>
+    <button class="btn next" onclick="plusSlides(1)">❯</button>
+    
+    <div class="slides" id="slideWrapper">
         <div class="slide">
-            <img src="C:\Users\user\Pictures\烏紗\att.yKfGubTQgv7BdwYnwaIOJZKAAgmEq9DvAJ9l0KO3Dao.jpeg" alt="圖片1">
-            <div class="slide-content">
-                <div class="slide-title">第一張幻燈片標題!</div>
-                <div class="slide-desc">這是您的第一段文字描述，可以在這裡解釋圖片內容。</div>
-            </div>
+            <img src="https://picsum.photos/800/400?random=1">
+            <h2>第一張標題</h2>
+            <p>描述文字一</p>
         </div>
         <div class="slide">
-            <img src="C:\Users\user\Pictures\烏紗\att.yKfGubTQgv7BdwYnwaIOJZKAAgmEq9DvAJ9l0KO3Dao.jpeg" alt="圖片2">
-            <div class="slide-content">
-                <div class="slide-title">第二張幻燈片標題</div>
-                <div class="slide-desc">點擊按鈕或滑動來切換不同的內容。</div>
-            </div>
+            <img src="https://picsum.photos/800/400?random=2">
+            <h2>第二張標題</h2>
+            <p>描述文字二</p>
         </div>
     </div>
-
-    <button class="btn prev" onclick="moveSlide(-1)">❮</button>
-    <button class="btn next" onclick="moveSlide(1)">❯</button>
 </div>
 
-
 <script>
+    let currentIdx = 0;
+    function plusSlides(n) {
+        const wrapper = document.getElementById('slideWrapper');
+        const total = document.querySelectorAll('.slide').length;
+        currentIdx = (currentIdx + n + total) % total;
+        wrapper.style.transform = `translateX(-${currentIdx * 100}vw)`;
+    }
+</script>
+
+</body>
+</html>
