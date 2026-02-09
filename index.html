@@ -1,52 +1,114 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { margin: 0; display: flex; justify-content: center; background: white; font-family: sans-serif; }
-        .slider { position: relative; width: 100vw; overflow: hidden; }
-        .slides { display: flex; transition: 0.5s; }
-        .slide { min-width: 100vw; text-align: center; padding: 20px; box-sizing: border-box; }
-        img { max-width: 90%; height: auto; border-radius: 10px; }
-        .btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.1); border: none; padding: 15px; cursor: pointer; font-size: 20px; z-index: 100; }
-        .prev { left: 0; }
-        .next { right: 0; }
+        body { margin: 0; display: flex; justify-content: center; background: #fff; font-family: -apple-system, sans-serif; }
+        .slider-container { position: relative; width: 100vw; max-width: 800px; overflow: hidden; }
+        
+        /* 投影片主體 */
+        .slides { display: flex; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .slide { min-width: 100%; box-sizing: border-box; padding: 20px; text-align: center; }
+        img { width: 100%; height: auto; border-radius: 12px; object-fit: cover; max-height: 450px; background: #f0f0f0; }
+        
+        /* 文字樣式 */
+        .content { padding: 15px; }
+        h2 { margin: 10px 0 5px; color: #37352f; font-size: 1.5rem; }
+        p { color: #666; font-size: 1rem; line-height: 1.5; }
+
+        /* 左右按鈕 */
+        .btn { position: absolute; top: 40%; transform: translateY(-50%); background: rgba(255,255,255,0.7); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; z-index: 10; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn:hover { background: #fff; }
+        .prev { left: 10px; }
+        .next { right: 10px; }
+
+        /* 圓點進度顯示 */
+        .dot-container { text-align: center; padding: 10px 0 20px; }
+        .dot { cursor: pointer; height: 10px; width: 10px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: 0.3s; border: none; padding: 0; }
+        .active, .dot:hover { background-color: #333; width: 25px; border-radius: 5px; } /* 當前頁面會變長一點，很有設計感 */
     </style>
 </head>
 <body>
 
-<div class="slider">
-    <button class="btn prev" onclick="plusSlides(-1)">❮</button>
-    <button class="btn next" onclick="plusSlides(1)">❯</button>
-    
+<div class="slider-container">
+    <button class="btn prev" onclick="moveSlide(-1)">❮</button>
+    <button class="btn next" onclick="moveSlide(1)">❯</button>
+
     <div class="slides" id="slideWrapper">
         <div class="slide">
             <img src="烏紗電影院do not use 繪師_支江.jpeg">
-            <h2>電影院</h2>
-            <p>不知道你現在的想什麼</p>
-            <p>繪:支江</p>
+            <div class="content">
+                <h2>電影院</h2>
+                <p>不知道你現在的想什麼</p>
+                <p>繪:支江</p>
+            </div>
         </div>
         <div class="slide">
             <img src="IMG_7974.jpeg">
-            <h2>早晨</h2>
-            <p> Oo一大早乒乒乓乓以為是蓋伊又欠一筆錢oO </p>
-            <p>繪:喵喵子Aulauly </p>
+            <div class="content">
+                <h2>早晨</h2>
+                <p> Oo一大早乒乒乓乓以為是蓋伊又欠一筆錢oO </p>
+                <p>繪:喵喵子Aulauly </p>        
+            </div>
+        </div>
+        <div class="slide">
+            <img src="https://picsum.photos/800/450?random=3" alt="Image 3">
+            <div class="content">
+                <h2>第三張幻燈片</h2>
+                <p>你也可以點擊下方的圓點直接切換。</p>
+            </div>
         </div>
     </div>
+
+    <div class="dot-container" id="dotContainer">
+        </div>
 </div>
 
 <script>
     let currentIdx = 0;
-    function plusSlides(n) {
-        const wrapper = document.getElementById('slideWrapper');
-        const total = document.querySelectorAll('.slide').length;
-        currentIdx = (currentIdx + n + total) % total;
-        wrapper.style.transform = `translateX(-${currentIdx * 100}vw)`;
+    const wrapper = document.getElementById('slideWrapper');
+    const slides = document.querySelectorAll('.slide');
+    const dotContainer = document.getElementById('dotContainer');
+
+    // 自動根據投影片數量生成圓點
+    slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.classList.add('dot');
+        if (i === 0) dot.classList.add('active');
+        dot.onclick = () => jumpToSlide(i);
+        dotContainer.appendChild(dot);
+    });
+
+    const dots = document.querySelectorAll('.dot');
+
+    function updateUI() {
+        // 切換投影片
+        wrapper.style.transform = `translateX(-${currentIdx * 100}%)`;
+        // 更新圓點狀態
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === currentIdx);
+        });
+    }
+
+    function moveSlide(step) {
+        currentIdx = (currentIdx + step + slides.length) % slides.length;
+        updateUI();
+    }
+
+    function jumpToSlide(index) {
+        currentIdx = index;
+        updateUI();
     }
 </script>
 
 </body>
 </html>
+     
+  
+
+          
+
 
 
 
